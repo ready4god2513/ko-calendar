@@ -47,43 +47,16 @@
 	</head>
 	<body>
 
-		<div class="ko-calendar">
-			<header>
-				<b data-bind="text: strings.months[current().getMonth()] + ' ' + current().getFullYear()"></b>
-				<span class="pull-right">
-					<a href="#" data-bind="click: prevMonth">&larr;</a>
-					<a href="#" data-bind="click: nextMonth">&rarr;</a>
-				</span>
-			</header>
-
-			<table>
-				<thead>
-					<tr data-bind="foreach: strings.days">
-						<th data-bind="text: $data"></th>
-					</tr>
-				</thead>
-				<tbody data-bind="foreach: sheet">
-					<tr class="week" data-bind="foreach: $data">
-						<td class="day" data-bind="css: { 'weekend': $data.getDay() == 0 || $data.getDay() == $root.constants.daysInWeek - 1, 'today': $root.utils.date.normalize(new Date()).toString() == $root.utils.date.normalize($data).toString() } ">
-							<a href="javascript:;" data-bind="text: $data.getDate(), attr: { title: $data }, click: $root.select, css: { active: $root.selected() ? $data.toString() == $root.selected().toString() : false } "></a>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-
-
-		<pre data-bind="text: selected"></pre>
-
+		<div data-bind="component: 'calendar'"></div>
 
 		<script type="text/javascript" src="../bower_components/knockout/index.js"></script>
-		<script type="text/javascript" src="../src/ko.datetime.js"></script>
+		<script type="text/javascript" src="../dist/ko-datetime.min.js"></script>
 		<script type="text/javascript">
 			window.onload = function() {
 
-				var dt = window.dt = new DateTime();
+				//var dt = window.dt = new DateTime();
 
-				ko.applyBindings(dt);
+				ko.applyBindings(function() {});
 
 			};
 		</script>

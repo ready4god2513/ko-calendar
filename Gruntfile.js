@@ -9,6 +9,9 @@ module.exports = function (grunt) {
 		pkg: pkg,
 
 		jshint: {
+			options: {
+				multistr: true
+			},
 			all: ['Gruntfile.js', 'src/**/*.js']
 		},
 
@@ -47,13 +50,12 @@ module.exports = function (grunt) {
 		}
 	});
 
-
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 
 	// Register Tasks
-	grunt.registerTask('default', ['jshint', 'uglify','less']);
-	grunt.registerTask('develop', ['jshint', 'uglify','less', 'watch']);
+	grunt.registerTask('default', ['jshint', 'uglify', 'less']);
+	grunt.registerTask('develop', ['jshint', 'uglify', 'less', 'watch']);
 };
