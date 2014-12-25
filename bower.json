@@ -1,0 +1,6 @@
+{
+	"name": "ko-datepicker",
+	"dependencies": {
+		"knockout": "http://cdnjs.cloudflare.com/ajax/libs/knockout/3.2.0/knockout-min.js"
+	}
+}
