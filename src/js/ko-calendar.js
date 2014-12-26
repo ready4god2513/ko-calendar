@@ -1,5 +1,5 @@
 ko.components.register('calendar', {
-    viewModel: function(params) {
+	viewModel: function(params) {
 		var self = this;
 
 		self.strings = {
@@ -15,10 +15,10 @@ ko.components.register('calendar', {
 			date: {
 				normalize: function(d) {
 					var normalized = new Date(d.getTime());
-				    normalized.setMinutes(0);
-				    normalized.setHours(0);
-				    normalized.setSeconds(0);
-				    return normalized;
+					normalized.setMinutes(0);
+					normalized.setHours(0);
+					normalized.setSeconds(0);
+					return normalized;
 				},
 
 				isSame: function(d1, d2) {
@@ -59,49 +59,49 @@ ko.components.register('calendar', {
 		self.sheet = ko.computed(function() {
 
 			// Current month set to the first day
-		    var normalized = self.utils.date.normalize(self.current());
+			var normalized = self.utils.date.normalize(self.current());
 			normalized.setDate(1);
-		    normalized.setDate(normalized.getDate() - normalized.getDay()); // Set our date to the first day of the week from the normalized month
+			normalized.setDate(normalized.getDate() - normalized.getDay()); // Set our date to the first day of the week from the normalized month
 
-		    var weeks = [],
-		    	week = 0,
-		    	startedMonth = false,
-		    	completedMonth = false,
-		    	completedWeek = false;
+			var weeks = [],
+				week = 0,
+				startedMonth = false,
+				completedMonth = false,
+				completedWeek = false;
 
-		    while(true) {
-		    	if(!weeks[week]) { weeks[week] = []; }
+			while(true) {
+				if(!weeks[week]) { weeks[week] = []; }
 
-		    	// If we haven't filled the current week up
-		    	if(weeks[week].length !== self.constants.daysInWeek) {
+				// If we haven't filled the current week up
+				if(weeks[week].length !== self.constants.daysInWeek) {
 
-		    		// Append to the week
-		    		weeks[week].push(new Date(normalized.getTime()));
+					// Append to the week
+					weeks[week].push(new Date(normalized.getTime()));
 
-		    		// And increment the date
-		    		normalized.setDate( normalized.getDate() + 1 );
-		    	}
+					// And increment the date
+					normalized.setDate( normalized.getDate() + 1 );
+				}
 
-		    	// If we've began working within the current month
-		    	if( normalized.getMonth() == self.current().getMonth() ) { startedMonth = true; }
+				// If we've began working within the current month
+				if( normalized.getMonth() == self.current().getMonth() ) { startedMonth = true; }
 
-		    	// If we've started our current month and we've changed months (and thus completed it)
-		    	if( startedMonth && (normalized.getMonth() !== self.current().getMonth()) ) { completedMonth = true; }
+				// If we've started our current month and we've changed months (and thus completed it)
+				if( startedMonth && (normalized.getMonth() !== self.current().getMonth()) ) { completedMonth = true; }
 
-		    	// If we've completed our month and we are at the end of the week
-		    	if(completedMonth && weeks[week].length == self.constants.daysInWeek) { completedWeek = true; }
+				// If we've completed our month and we are at the end of the week
+				if(completedMonth && weeks[week].length == self.constants.daysInWeek) { completedWeek = true; }
 
-		    	// If we've completed the month and our week
-		    	if(completedMonth && completedWeek) { break; }
+				// If we've completed the month and our week
+				if(completedMonth && completedWeek) { break; }
 
-		    	// Otherwise, if we're at the end of the week, increment the current week
-		    	if(weeks[week].length == self.constants.daysInWeek) { week++; }
-		    }
+				// Otherwise, if we're at the end of the week, increment the current week
+				if(weeks[week].length == self.constants.daysInWeek) { week++; }
+			}
 
-		    return weeks;
+			return weeks;
 		});
-    },
-    template:	'<div class="ko-calendar" data-bind="with: $data">\
+	},
+	template:	'<div class="ko-calendar" data-bind="with: $data">\
 					<header>\
 						<b data-bind="text: strings.months[current().getMonth()] + \' \' + current().getFullYear()"></b>\
 						<span class="pull-right">\
