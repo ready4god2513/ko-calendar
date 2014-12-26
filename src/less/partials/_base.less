@@ -1,33 +1,53 @@
-.ko-calendar { display: inline-block; }
-.ko-calendar a { text-decoration: none; }
-.ko-calendar { font-family: sans-serif; }
+.ko-calendar {
 
-.ko-calendar table {
-	border-collapse: collapse;
-}
-.ko-calendar thead th {
-	border-bottom: 1px solid #000;
-}
-.ko-calendar tbody a {
-	display: block;
+	display: inline-blpck;
+	font-family: sans-serif;
 
-	width: 50px;
-	line-height: 50px;
+	table {
+		border-collapse: collapse;
 
-	text-align: center;
-	text-decoration: none;
+		thead {
+			th {
 
-	border-radius: 3px;
-
-	color: #333;
-	}
-	.ko-calendar .weekend a {
-		color: #ccc;
-	}
-	.ko-calendar a:hover,
-	.ko-calendar .today a {
-		background: rgba(0,0,0,0.05);
+			}
 		}
-	.ko-calendar a.active {
-		background: rgba(255,255,0,0.2);
+
+		tbody {
+			a {
+				display: block;
+
+				width: 50px;
+				line-height: 50px;
+
+				text-align: center;
+				text-decoration: none;
+
+				border-radius: 3px;
+
+				color: #333;
+
+				&:hover {
+					background: @hover;
+				}
+
+				&.active {
+					background: @active;
+				}
+			}
+
+			.today {
+				a {
+					background: @hover;
+				}
+			}
+			.weekend {
+				a {
+					color: #ccc;
+					&:hover {
+						background: @hover;
+					}
+				}
+			}
+		}
 	}
+}
