@@ -1,4 +1,4 @@
-ko-datetime.js
+ko-calendar
 ==============
 
-A simple datetime picker written as a Knockout Component
+A simple date/time picker written as a Knockout Component

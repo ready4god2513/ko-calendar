@@ -1,11 +1,11 @@
 {
-	"name": "ko-datetime",
+	"name": "ko-calendar",
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
 
 	},
-	"repository": "git@github.com:jakiestfu/ko-datetime.js.git",
+	"repository": "git@github.com:jakiestfu/ko-calendar.git",
 	"dependencies": {
 		"bower": "1.3.12",
 		"grunt": "0.4.5",

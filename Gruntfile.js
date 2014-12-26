@@ -21,7 +21,7 @@ module.exports = function (grunt) {
 					sourcemap: 'none'
 				},
 				files: {
-					'dist/ko-datetime.css': ['src/less/ko-datetime.less']
+					'dist/ko-calendar.css': ['src/less/ko-calendar.less']
 				}
 			},
 		},
@@ -29,11 +29,11 @@ module.exports = function (grunt) {
 		uglify: {
 			prod: {
 				options: {
-					banner: "/*! ko-datetime */" + "\n",
+					banner: "/*! ko-calendar */" + "\n",
 					preserveComments: 'none'
 				},
 				files: {
-					'dist/ko-datetime.min.js': ['src/js/ko-datetime.js']
+					'dist/ko-calendar.min.js': ['src/js/ko-calendar.js']
 				}
 			}
 		},
