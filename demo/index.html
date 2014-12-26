@@ -4,46 +4,7 @@
 		<meta charset="utf-8">
 		<title>KO DateTime</title>
 
-		<style type="text/css">
-
-			.pull-right { float: right; }
-			.ko-calendar { display: inline-block; }
-			.ko-calendar a { text-decoration: none; }
-			.ko-calendar { font-family: sans-serif; }
-
-			.ko-calendar table {
-				border-collapse: collapse;
-			}
-			.ko-calendar thead th {
-				border-bottom: 1px solid #000;
-			}
-			.ko-calendar tbody a {
-				display: block;
-
-				width: 50px;
-				line-height: 50px;
-
-				text-align: center;
-				text-decoration: none;
-
-				border-radius: 3px;
-
-				color: #333;
-				}
-				.ko-calendar .weekend a {
-					color: #ccc;
-				}
-				.ko-calendar a:hover,
-				.ko-calendar .today a {
-					background: rgba(0,0,0,0.05);
-					}
-				.ko-calendar a.active {
-					background: rgba(255,255,0,0.2);
-				}
-
-
-
-		</style>
+		<link rel="stylesheet" type="text/css" href="../dist/ko-calendar.css">
 	</head>
 	<body>
 
@@ -54,9 +15,7 @@
 		<script type="text/javascript">
 			window.onload = function() {
 
-				//var dt = window.dt = new DateTime();
-
-				ko.applyBindings(function() {});
+				ko.applyBindings();
 
 			};
 		</script>
