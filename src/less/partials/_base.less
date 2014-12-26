@@ -1,5 +1,14 @@
 .ko-calendar {
 
+	* {
+		text-rendering: optimizeLegibility;
+		-webkit-font-smoothing: antialiased;
+	}
+
+	border: 1px solid @border-color;
+	padding: 4px;
+	.border-radius(5px);
+
 	cursor: default;
 	display: inline-block;
 	font-family: sans-serif;
@@ -27,7 +36,12 @@
 			}
 
 			&.active {
+				color: @active-color;
 				background: @active;
+				font-weight: bold;
+				&:hover {
+					background: @active-hover;
+				}
 			}
 		}
 
@@ -35,15 +49,7 @@
 
 			.today {
 				a {
-					background: @hover;
-				}
-			}
-			.weekend {
-				a {
-					color: #ccc;
-					&:hover {
-						background: @hover;
-					}
+					font-weight: bold;
 				}
 			}
 		}

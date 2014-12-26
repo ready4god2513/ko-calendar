@@ -6,7 +6,7 @@
 		var self = this;
 
 		self.strings = {
-			months: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "Octover", "November", "December" ],
+			months: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ],
 			days: [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ]
 		};
 
