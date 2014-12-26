@@ -28,15 +28,15 @@
 				isSame: function(d1, d2) {
 					if(!d1 || !d2) { return false; }
 					return (
-						(d1.getMonth() == d2.getMonth()) &&
-						(d1.getDate() == d2.getDate()) &&
+						(d1.getUTCMonth() == d2.getUTCMonth()) &&
+						(d1.getUTCDate() == d2.getUTCDate()) &&
 						(d1.getFullYear() == d2.getFullYear())
 					);
 				},
 
 				isWeekend: function(d) {
 					if(!d) { return false; }
-					return d.getDay() === 0 || (d.getDay() == self.constants.daysInWeek - 1);
+					return d.getUTCDay() === 0 || (d.getUTCDay() == self.constants.daysInWeek - 1);
 				}
 			}
 		};
@@ -50,13 +50,13 @@
 
 		self.nextMonth = function() {
 			self.current(
-				new Date( self.current().setMonth(self.current().getMonth()+1) )
+				new Date( self.current().setMonth(self.current().getUTCMonth()+1) )
 			);
 		};
 
 		self.prevMonth = function() {
 			self.current(
-				new Date( self.current().setMonth(self.current().getMonth()-1) )
+				new Date( self.current().setMonth(self.current().getUTCMonth()-1) )
 			);
 		};
 
@@ -65,7 +65,7 @@
 			// Current month set to the first day
 			var normalized = self.utils.date.normalize(self.current());
 			normalized.setDate(1);
-			normalized.setDate(normalized.getDate() - normalized.getDay()); // Set our date to the first day of the week from the normalized month
+			normalized.setDate(normalized.getUTCDate() - normalized.getUTCDay()); // Set our date to the first day of the week from the normalized month
 
 			var weeks = [],
 				week = 0,
@@ -83,14 +83,14 @@
 					weeks[week].push(new Date(normalized.getTime()));
 
 					// And increment the date
-					normalized.setDate( normalized.getDate() + 1 );
+					normalized.setDate( normalized.getUTCDate() + 1 );
 				}
 
 				// If we've began working within the current month
-				if( normalized.getMonth() == self.current().getMonth() ) { startedMonth = true; }
+				if( normalized.getUTCMonth() == self.current().getUTCMonth() ) { startedMonth = true; }
 
 				// If we've started our current month and we've changed months (and thus completed it)
-				if( startedMonth && (normalized.getMonth() !== self.current().getMonth()) ) { completedMonth = true; }
+				if( startedMonth && (normalized.getUTCMonth() !== self.current().getUTCMonth()) ) { completedMonth = true; }
 
 				// If we've completed our month and we are at the end of the week
 				if(completedMonth && weeks[week].length == self.constants.daysInWeek) { completedWeek = true; }
