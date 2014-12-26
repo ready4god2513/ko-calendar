@@ -19,6 +19,20 @@ ko.components.register('calendar', {
 				    normalized.setHours(0);
 				    normalized.setSeconds(0);
 				    return normalized;
+				},
+
+				isSame: function(d1, d2) {
+					if(!d1 || !d2) { return false; }
+					return (
+						(d1.getMonth() == d2.getMonth()) &&
+						(d1.getDate() == d2.getDate()) &&
+						(d1.getFullYear() == d2.getFullYear())
+					);
+				},
+
+				isWeekend: function(d) {
+					if(!d) { return false; }
+					return d.getDay() === 0 || (d.getDay() == self.constants.daysInWeek - 1);
 				}
 			}
 		};
@@ -91,7 +105,6 @@ ko.components.register('calendar', {
 					<a href="#" data-bind="click: nextMonth">&rarr;</a>\
 				</span>\
 			</header>\
-\
 			<table>\
 				<thead>\
 					<tr data-bind="foreach: strings.days">\
@@ -100,8 +113,8 @@ ko.components.register('calendar', {
 				</thead>\
 				<tbody data-bind="foreach: sheet">\
 					<tr class="week" data-bind="foreach: $data">\
-						<td class="day" data-bind="css: { weekend: $data.getDay() == 0 || $data.getDay() == $parents[1].constants.daysInWeek - 1, today: $parents[1].utils.date.normalize(new Date()).toString() == $parents[1].utils.date.normalize($data).toString() } ">\
-							<a href="javascript:;" data-bind="text: $data.getDate(), attr: { title: $data }, click: $parents[1].select, css: { active: $parents[1].selected() ? $data.toString() == $parents[1].selected().toString() : false } "></a>\
+						<td class="day" data-bind="css: { weekend: $parents[1].utils.date.isWeekend($data), today: $parents[1].utils.date.isSame(new Date(), $data) } ">\
+							<a href="javascript:;" data-bind="text: $data.getDate(), attr: { title: $data }, click: $parents[1].select, css: { active: $parents[1].utils.date.isSame($parents[1].selected(), $data) } "></a>\
 						</td>\
 					</tr>\
 				</tbody>\
