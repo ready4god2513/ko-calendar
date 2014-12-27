@@ -1,55 +1,62 @@
 .ko-calendar {
 
+	display: inline-block;
+
 	* {
 		text-rendering: optimizeLegibility;
 		-webkit-font-smoothing: antialiased;
 	}
 
-	border: 1px solid @border-color;
-	padding: 4px;
-	.border-radius(5px);
+	.calendar-sheet {
+		display: inline-block;
+		padding: 4px;
+		border: 1px solid @border-color;
+		.border-radius(5px);
 
-	cursor: default;
-	display: inline-block;
-	font-family: sans-serif;
-	font-size: @base-font-size;
+		cursor: default;
 
-	color: @color;
-	a {
+		font-family: sans-serif;
+		font-size: @base-font-size;
+
 		color: @color;
-		.transition(all 0.3s ease);
-	}
-
-	table {
-		border-collapse: collapse;
 
 		a {
-			.cell(@cell-size, @cell-padding);
-			display: block;
-			text-align: center;
-			text-decoration: none;
-
-			.border-radius();
-
-			&:hover {
-				background: @hover;
-			}
-
-			&.active {
-				color: @active-color;
-				background: @active;
-				font-weight: bold;
-				&:hover {
-					background: @active-hover;
-				}
-			}
+			color: @color;
+			.transition(all @transition-speed ease);
 		}
 
-		tbody {
-
+		table {
+			border-collapse: collapse;
 			.today {
 				a {
 					font-weight: bold;
+				}
+			}
+			.inactive {
+				a {
+					color: @inactive-color;
+				}
+			}
+
+			a {
+				.cell(@cell-size, @cell-padding);
+				display: block;
+				text-align: center;
+				text-decoration: none;
+
+				.border-radius();
+
+				&:hover {
+					background: @hover;
+				}
+
+				&.active {
+					color: @active-color;
+					background: @active;
+					font-weight: bold;
+					&:hover {
+						background: @active-hover;
+					}
 				}
 			}
 		}

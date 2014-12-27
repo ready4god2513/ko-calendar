@@ -8,12 +8,25 @@
 	</head>
 	<body>
 
-		<div data-bind="component: 'calendar'"></div>
+		<div data-bind="component: { name: 'calendar', params: { value: date, current: current, deselectable: true, input: true } }"></div>
+		<code data-bind="text: date() ? date().toString() : 'Not Selected'"></code>
+
 
 		<script type="text/javascript" src="../bower_components/knockout/index.js"></script>
 		<script type="text/javascript" src="../dist/ko-calendar.min.js"></script>
 		<script type="text/javascript">
-			window.onload = ko.applyBindings;
+			window.onload = function() {
+
+				var Demo = function() {
+					var self = this;
+					self.date = ko.observable();
+
+					self.current = new Date();
+					self.current.setMonth( self.current.getMonth() + 1 );
+				};
+
+				ko.applyBindings(new Demo());
+			};
 		</script>
 	</body>
 </html>
