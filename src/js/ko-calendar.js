@@ -8,7 +8,8 @@
 		self.opts = {
 			value: ko.observable(),
 			current: ko.observable(),
-			deselectable: false
+			deselectable: true,
+			showToday: true
 		};
 
 		ko.utils.extend(self.opts, params);
@@ -84,10 +85,16 @@
 
 		// Selects a date
 		self.select = function(data, e) {
+			console.log(self.opts);
 			if( self.opts.deselectable && self.utils.date.isSame(self.selected(), data) ) {
 				return self.selected(null);
 			}
 			self.selected(data);
+		};
+		self.select_today = function(data, e) {
+			var d = new Date();
+			self.selected(d);
+			self.current(d);
 		};
 
 		self.nextMonth = function() {
@@ -157,8 +164,8 @@
 							<th>\
 								<a href="#" data-bind="click: prevMonth" class="prev">&laquo;</a>\
 							</th>\
-							<th colspan="5">\
-								<b data-bind="text: strings.months[current().getMonth()] + \' \' + current().getFullYear()"></b>\
+							<th data-bind="attr: { colspan: constants.daysInWeek - 2 } ">\
+								<b data-bind="text: strings.months[current().getUTCMonth()] + \' \' + current().getFullYear()"></b>\
 							</th>\
 							<th>\
 								<a href="#" data-bind="click: nextMonth" class="next">&raquo;</a>\
@@ -171,12 +178,21 @@
 					<tbody data-bind="foreach: sheet">\
 						<tr class="week" data-bind="foreach: $data">\
 							<td class="day" data-bind="css: { weekend: $parents[1].utils.date.isWeekend($data), today: $parents[1].utils.date.isSame(new Date(), $data), inactive: !($parents[1].utils.date.isSameMonth($parents[1].current(), $data)) } ">\
-								<a href="javascript:;" data-bind="text: $data.getDate(), attr: { title: $data }, click: $parents[1].select, css: { active: $parents[1].utils.date.isSame($parents[1].selected(), $data) } "></a>\
+								<a href="javascript:;" data-bind="text: $data.getUTCDate(), attr: { title: $data }, click: $parents[1].select, css: { active: $parents[1].utils.date.isSame($parents[1].selected(), $data) } "></a>\
 							</td>\
 						</tr>\
 					</tbody>\
+					<!-- ko if: opts.showToday -->\
+						<tfoot>\
+							<tr>\
+								<td data-bind="attr: { colspan: constants.daysInWeek } ">\
+									<a href="javascript:;" data-bind="click: select_today">Today</a>\
+								</td>\
+							</tr>\
+						</tfoot>\
+					<!-- /ko -->\
 				</table>\
-				</div>\
+			</div>\
 		</div>';
 
 
