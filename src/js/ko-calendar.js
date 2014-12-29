@@ -8,11 +8,7 @@
 		self.opts = {
 			value: ko.observable(),
 			current: ko.observable(),
-			deselectable: false,
-			input: false,
-			inputRenderer: function() {
-				return '<input type="text">';
-			}
+			deselectable: false
 		};
 
 		ko.utils.extend(self.opts, params);
@@ -113,11 +109,11 @@
 			normalized.setDate(1);
 			normalized.setDate(normalized.getUTCDate() - normalized.getUTCDay()); // Set our date to the first day of the week from the normalized month
 
-			var weeks = [],
-				week = 0,
-				startedMonth = false,
-				completedMonth = false,
-				completedWeek = false;
+			var weeks = [];
+			var week = 0;
+			var startedMonth = false;
+			var completedMonth = false;
+			var completedWeek = false;
 
 			while(true) {
 				if(!weeks[week]) { weeks[week] = []; }
@@ -152,16 +148,9 @@
 		});
 	};
 
-	self.focused = ko.observable(false);
-	self.doFocus = function() { self.focused(true); };
-	self.doBlur = function() { self.focused(false); };
-
 	var Template =
 		'<div class="ko-calendar" data-bind="with: $data">\
-			<!-- ko if: opts.input -->\
-			<input type="text" data-bind="event: { focus: doFocus, blur: doBlur }">\
-			<!-- /ko -->\
-			<div class="calendar-sheet" data-bind="visible: focused() || !opts.input">\
+			<div class="calendar-sheet">\
 				<table data-bind="css: { selected: selected } ">\
 					<thead>\
 						<tr>\
