@@ -28,7 +28,8 @@
 
 		self.strings = {
 			months: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ],
-			days: [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ]
+			days: [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ],
+			time: ["AM", "PM"]
 		};
 
 		self.constants = {
@@ -173,13 +174,13 @@
 			next: function(data, e) {
 				if(!self.selected()) { return self.time.selectNow(); }
 				self.selected(
-					new Date( self.selected()[data.setter]( self.selected()[data.getter]() + 1 ) )
+					new Date( data.set( data.get()+1 ) )
 				);
 			},
 			prev: function(data, e) {
 				if(!self.selected()) { return self.time.selectNow(); }
 				self.selected(
-					new Date( self.selected()[data.setter]( self.selected()[data.getter]() - 1 ) )
+					new Date( data.set( data.get()-1 ) )
 				);
 			},
 			selectNow: function() {
@@ -188,12 +189,60 @@
 				self.current(d);
 			},
 			sheet: ko.observableArray([
-				{ getter: 'getUTCHours', setter: 'setUTCHours' },
-				{ getter: 'getUTCMinutes', setter: 'setUTCMinutes' }
-			])
+				{
+					type: 'hours',
+					get: function(log) {
+						return self.selected().getUTCHours();
+					},
+					set: function(to) { return self.selected().setUTCHours(to); }
+				},
+				{
+					type: 'seconds',
+					get: function() { return self.selected().getUTCMinutes(); },
+					set: function(to) { return self.selected().setUTCMinutes(to); }
+				}
+			]),
+			text: function(data) {
+				if(!self.selected()) {
+					return '-';
+				}
+
+				switch(data.type) {
+					case 'suffix':
+						return data.get() ? self.strings.time[1] : self.strings.time[0];
+					case 'hours':
+						var hours = data.get();
+						if(!self.opts.militaryTime && hours > 12 || hours === 0 ) {
+							hours -= 12;
+						}
+						return Math.abs(hours);
+					default:
+						return self.utils.strings.pad(data.get());
+				}
+			}
 		};
-		if(self.opts.militaryTime) {
-			self.time.sheet.push({});
+		if(!self.opts.militaryTime) {
+			self.time.sheet.push({
+				type: 'suffix',
+				get: function() {
+					if(self.selected() && self.selected().getUTCHours() < 12 ) {
+						return 0;
+					}
+					return 1;
+				},
+
+				// This set function is special because we don't care about the `to` parameter
+				set: function(to) {
+					var hours = self.selected().getUTCHours();
+					if(hours >= 12) {
+						hours -= 12;
+					}
+					else if(hours < 12) {
+						hours += 12;
+					}
+					return self.selected().setUTCHours( hours );
+				}
+			});
 		}
 	};
 
@@ -244,7 +293,7 @@
 						</td>\
 					</tr>\
 					<tr data-bind="foreach: time.sheet">\
-						<td data-bind="css: { colon: $index() === 0, inactive: !$parent.selected() }, text: $parent.selected() ? $parent.utils.strings.pad( $parent.selected()[getter]() ) : \'-\'"></td>\
+						<td data-bind="css: { colon: $index() === 0, inactive: !$parent.selected() }, text: $parent.time.text($data)"></td>\
 					</tr>\
 					<tr data-bind="foreach: time.sheet">\
 						<td>\
