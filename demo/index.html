@@ -8,8 +8,8 @@
 	</head>
 	<body>
 
-		<div data-bind="component: { name: 'calendar', params: { value: date, current: current } }"></div>
-		<code data-bind="text: date() ? date().toString() : 'Not Selected'"></code>
+		<div data-bind="component: { name: 'calendar', params: opts }"></div>
+		<code data-bind="text: date() ? date().toUTCString() : 'Not Selected'"></code>
 
 
 		<script type="text/javascript" src="../bower_components/knockout/index.js"></script>
@@ -20,11 +20,13 @@
 				var Demo = function() {
 					var self = this;
 					self.date = ko.observable();
-
-					self.current = new Date();
+					self.opts = {
+						value: self.date
+					};
 				};
 
-				ko.applyBindings(new Demo());
+				var instance = window.instance = new Demo();
+				ko.applyBindings(instance);
 			};
 		</script>
 	</body>

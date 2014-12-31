@@ -7,65 +7,117 @@
 		-webkit-font-smoothing: antialiased;
 	}
 
-	.calendar-sheet {
-		display: inline-block;
-		padding: 4px;
-		border: 1px solid @border-color;
-		.border-radius(5px);
+	padding: 4px;
+	border: 1px solid @border-color;
+	.border-radius(5px);
 
-		cursor: default;
+	cursor: default;
 
-		font-family: sans-serif;
-		font-size: @base-font-size;
+	font-family: sans-serif;
+	font-size: @base-font-size;
 
-		color: @color;
+	color: @color;
 
-		a {
-			color: @color;
-			.transition(all @transition-speed ease);
+	.calendar-sheet,
+	.time-sheet {
+
+		width: 100%;
+		border-collapse: collapse;
+
+		.today {
+			a {
+				position: relative;
+				font-weight: bold;
+				&:after {
+					content: '';
+					display: inline-block;
+					border-left: 7px solid transparent;
+					border-bottom: 7px solid @active;
+					border-top-color: transparent;
+					position: absolute;
+					bottom: 4px;
+					right: 4px;
+				}
+			}
+		}
+		.inactive {
+			a {
+				color: @inactive-color;
+			}
 		}
 
-		table {
-			border-collapse: collapse;
-			.today {
-				a {
-					font-weight: bold;
-				}
+		a {
+			.cell(@cell-size, @cell-padding);
+			display: inline-block;
+			text-align: center;
+			text-decoration: none;
+			color: @color;
+
+			.transition(all @transition-speed ease);
+			.border-radius();
+
+			&:hover {
+				background: @hover;
 			}
-			.inactive {
-				a {
-					color: @inactive-color;
-				}
-			}
 
-			a {
-				.cell(@cell-size, @cell-padding);
-				display: block;
-				text-align: center;
-				text-decoration: none;
-
-				.border-radius();
-
+			&.active {
+				color: @active-color;
+				background: @active;
+				font-weight: bold;
 				&:hover {
-					background: @hover;
+					background: @active-hover;
 				}
-
-				&.active {
-					color: @active-color;
-					background: @active;
-					font-weight: bold;
-					&:hover {
-						background: @active-hover;
-					}
+				&:after {
+					border-bottom-color: @active-color;
 				}
 			}
+		}
 
-			tfoot {
-				a {
-					width: auto;
-					display: block;
-					font-weight: bold;
+		tfoot {
+			a {
+				width: auto;
+				display: block;
+				font-weight: bold;
+			}
+		}
+
+		&.time-sheet {
+			text-align: center;
+			.up,
+			.down {
+				position: relative;
+				&:after {
+					content: " ";
+					border: 4px solid #000;
+					border-top: none;
+					border-left-color: transparent;
+					border-right-color: transparent;
+					display: inline-block;
 				}
+			}
+			.down {
+				&:after {
+					border-top: 4px solid #000;
+					border-bottom: none;
+				}
+			}
+			.colon {
+				position: relative;
+				&:after {
+					content: ":";
+					position: absolute;
+					right: 0;
+				}
+			}
+		}
+	}
+
+	.calendar-sheet ~ .time-sheet {
+		border-top: 1px solid #eee;
+		margin-top: 5px;
+		tr:first-child {
+			td {
+				padding-top: 5px;
 			}
 		}
 	}
