@@ -62,7 +62,7 @@
 					return (
 						(d1.getUTCMonth() == d2.getUTCMonth()) &&
 						(d1.getUTCDate() == d2.getUTCDate()) &&
-						(d1.getFullYear() == d2.getFullYear())
+						(d1.getUTCFullYear() == d2.getUTCFullYear())
 					);
 				},
 
@@ -212,7 +212,7 @@
 						return data.get() ? self.strings.time[1] : self.strings.time[0];
 					case 'hours':
 						var hours = data.get();
-						if(!self.opts.militaryTime && hours > 12 || hours === 0 ) {
+						if(!self.opts.militaryTime && (hours > 12 || hours === 0) ) {
 							hours -= 12;
 						}
 						return Math.abs(hours);
