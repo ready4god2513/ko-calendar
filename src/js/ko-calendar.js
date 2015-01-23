@@ -184,9 +184,19 @@
 				);
 			},
 			selectNow: function() {
-				var d = new Date();
-				self.selected(d);
-				self.current(d);
+				var now = new Date();
+
+				now.setTime(
+					Date.UTC(
+						now.getFullYear(),
+						now.getMonth(),
+						now.getDate(),
+						now.getHours(),
+						now.getMinutes()
+					)
+				);
+				self.selected(now);
+				self.current(now);
 			},
 			sheet: ko.observableArray([
 				{
