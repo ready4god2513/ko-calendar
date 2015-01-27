@@ -47,6 +47,12 @@
 				color: @inactive-color;
 			}
 		}
+		.outofrange {
+			a {
+				color: @inactive-color;
+				pointer-events: none;
+			}
+		}
 
 		a {
 			.cell(@cell-size, @cell-padding);
@@ -109,6 +115,15 @@
 					content: ":";
 					position: absolute;
 					right: 0;
+				}
+			}
+			.outofrange {
+				.up,
+				.down {
+					&:after {
+						border-top-color: @inactive-color;
+						border-bottom-color: @inactive-color;
+					}
 				}
 			}
 		}
