@@ -12,7 +12,7 @@
 		<!-- <input type="text" data-bind="calendar: opts, value: date" /> -->
 
 
-		<code data-bind="text: date() ? date().toUTCString() : 'Not Selected'"></code>
+		<code data-bind="text: date() || 'Not Selected'"></code>
 
 
 		<script type="text/javascript" src="../bower_components/knockout/index.js"></script>
@@ -24,7 +24,8 @@
 					var self = this;
 					self.date = ko.observable();
 					self.opts = {
-						value: self.date
+						value: self.date,
+						min: new Date(2015, 0, 5)
 					};
 				};
 
