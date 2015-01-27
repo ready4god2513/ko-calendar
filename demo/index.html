@@ -8,8 +8,8 @@
 	</head>
 	<body>
 
-		<!-- <div data-bind="component: { name: 'calendar', params: opts }"></div> -->
-		<input type="text" data-bind="calendar: opts, value: date" />
+		<div data-bind="component: { name: 'calendar', params: opts }"></div>
+		<!-- <input type="text" data-bind="calendar: opts, value: date" /> -->
 
 
 		<code data-bind="text: date() ? date().toUTCString() : 'Not Selected'"></code>

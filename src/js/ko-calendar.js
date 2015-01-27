@@ -99,18 +99,10 @@
 					if(!d) { return false; }
 					if(!self.opts.min && !self.opts.max) { return true; }
 
-					if(self.opts.min &&
-						!((self.opts.min.getMonth() <= d.getMonth()) &&
-							(self.opts.min.getDate() <= d.getDate()) &&
-							(self.opts.min.getFullYear() <= d.getFullYear()))
-						) {
+					if(self.opts.min && self.utils.date.normalize(self.opts.min) > d) {
 						return false;
 					}
-					if(self.opts.max &&
-						!((self.opts.max.getMonth() >= d.getMonth()) &&
-							(self.opts.max.getDate() >= d.getDate()) &&
-							(self.opts.max.getFullYear() >= d.getFullYear()))
-						) {
+					if(self.opts.max && self.utils.date.normalize(self.opts.max) < d) {
 						return false;
 					}
 
@@ -118,17 +110,41 @@
 				}
 			},
 			time: {
-				checkMinTimeRange: function() {
-					if(!self.selected() || !self.opts.min || !self.utils.date.isSame(self.selected(), self.opts.min)) { return false; }
+				handleSuffixCheck: function(date) {
+					var hours = date.getHours();
+					if(hours >= 12) {
+						hours -= 12;
+					}
+					else if(hours < 12) {
+						hours += 12;
+					}
+					return date.setHours(hours);
+				},
+				checkMinTimeRange: function(data) {
+					if(!data || !self.selected() || (!self.opts.min && !self.opts.max)) { return false; }
 
-					if(self.opts.min >= self.selected()) { return true; }
+					var d = new Date(self.selected());
+
+					if(data.type === "hours") { d.setHours(d.getHours() - 1); }
+					else if(data.type === "minutes") { d.setMinutes(d.getMinutes() - 1); }
+					else if(data.type === "suffix") { d = self.utils.time.handleSuffixCheck(d); }
+
+					if(self.opts.max && self.opts.max < d) { return true; }
+					if(self.opts.min && self.opts.min > d) { return true; }
 
 					return false;
 				},
-				checkMaxTimeRange: function() {
-					if(!self.selected() || !self.opts.max || !self.utils.date.isSame(self.selected(), self.opts.max)) { return false; }
+				checkMaxTimeRange: function(data) {
+					if(!data || !self.selected() || (!self.opts.min && !self.opts.max)) { return false; }
 
-					if(self.opts.max <= self.selected()) { return true; }
+					var d = new Date(self.selected());
+
+					if(data.type === "hours") { d.setHours(d.getHours() + 1); }
+					else if(data.type === "minutes") { d.setMinutes(d.getMinutes() + 1); }
+					else if(data.type === "suffix") { d = new Date(self.utils.time.handleSuffixCheck(d)); }
+
+					if(self.opts.min && self.opts.min > d) { return true; }
+					if(self.opts.max && self.opts.max < d) { return true; }
 
 					return false;
 				}
@@ -373,7 +389,7 @@
 			<table class="time-sheet">\
 				<tbody>\
 					<tr data-bind="foreach: time.sheet">\
-						<td data-bind="css: { outofrange: $parent.utils.time.checkMaxTimeRange() }">\
+						<td data-bind="css: { outofrange: $parent.utils.time.checkMaxTimeRange($data) }">\
 							<a href="#" class="up" data-bind="click: $parent.time.next"></a>\
 						</td>\
 					</tr>\
@@ -381,7 +397,7 @@
 						<td data-bind="css: { colon: $index() === 0, inactive: !$parent.selected() }, text: $parent.time.text($data)"></td>\
 					</tr>\
 					<tr data-bind="foreach: time.sheet">\
-						<td data-bind="css: { outofrange: $parent.utils.time.checkMinTimeRange() }">\
+						<td data-bind="css: { outofrange: $parent.utils.time.checkMinTimeRange($data) }">\
 							<a href="#" class="down" data-bind="click: $parent.time.prev"></a>\
 						</td>\
 					</tr>\
