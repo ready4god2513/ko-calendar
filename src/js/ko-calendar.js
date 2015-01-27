@@ -91,6 +91,30 @@
 				pad: function(n) {
 					return n < 10 ? "0" + n : n;
 				}
+			},
+			element: {
+				offset: function(el) {
+					var box = el.getBoundingClientRect();
+					var doc = document.documentElement;
+
+					return {
+						top: box.top + window.pageYOffset - doc.clientTop,
+						left: box.left + window.pageXOffset - doc.clientLeft
+					};
+				},
+				height: function(el) {
+					return el.offsetHeight;
+				},
+				isDescendant: function(parent, child) {
+					var node = child.parentNode;
+					while (node !== null) {
+						if (node == parent) {
+							return true;
+						}
+						node = node.parentNode;
+					}
+					return false;
+				}
 			}
 		};
 
@@ -192,7 +216,8 @@
 						now.getMonth(),
 						now.getDate(),
 						now.getHours(),
-						now.getMinutes()
+						now.getMinutes(),
+						now.getSeconds()
 					)
 				);
 				self.selected(now);
@@ -231,6 +256,7 @@
 				}
 			}
 		};
+
 		if(!self.opts.militaryTime) {
 			self.time.sheet.push({
 				type: 'suffix',
@@ -254,10 +280,12 @@
 				}
 			});
 		}
+
+		self.visible = ko.observable(true);
 	};
 
 	var Template =
-		'<div class="ko-calendar" data-bind="with: $data, visible: opts.showCalendar || opts.showTime">\
+		'<div class="ko-calendar" data-bind="with: $data, visible: (opts.showCalendar || opts.showTime) && visible()">\
 			<!-- ko if: opts.showCalendar -->\
 			<table data-bind="css: { selected: selected } " class="calendar-sheet">\
 				<thead>\
@@ -330,5 +358,55 @@
 		viewModel: Model,
 		template: Template
 	});
+
+	// Binding
+	ko.bindingHandlers[binding] = {
+		init: function(el, opts, allBindings, viewModel, bindingContext) {
+
+			var params = ko.unwrap(opts());
+			var instance = new Model(params);
+
+			if( el.tagName == "INPUT" ) {
+
+				// Create our template
+				var temp = document.createElement('div');
+				temp.innerHTML = Template;
+				target = temp.children[0];
+				el.parentNode.insertBefore(target, el.nextSibling);
+
+				instance.visible(false);
+				el.addEventListener('focus', function() {
+
+					var offset = instance.utils.element.offset(el);
+					var height = instance.utils.element.height(el);
+					target.style.position = "absolute";
+					target.style.top = (offset.top + height + 5) + 'px';
+					target.style.left = (offset.left) + 'px';
+
+					instance.visible(true);
+				});
+
+				document.addEventListener('mousedown', function(e) {
+					if(!(
+						e.target == el ||
+						e.target == target ||
+						instance.utils.element.isDescendant(target, e.target)
+					)) {
+						instance.visible(false);
+					}
+				});
+
+			} else {
+				target = el.children[0]; // The first node in our Template
+			}
+
+			el.innerHTML = Template;
+			ko.applyBindings(instance, target);
+
+			return {
+				controlsDescendantBindings: true
+			};
+		}
+	};
 
 }).call(this);

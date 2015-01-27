@@ -2,13 +2,16 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>KO DateTime</title>
+		<title>KO Calendar</title>
 
 		<link rel="stylesheet" type="text/css" href="../dist/ko-calendar.css">
 	</head>
 	<body>
 
-		<div data-bind="component: { name: 'calendar', params: opts }"></div>
+		<!--<div data-bind="component: { name: 'calendar', params: opts }"></div>-->
+		<input type="text" data-bind="calendar: opts, value: date" />
+
+
 		<code data-bind="text: date() ? date().toUTCString() : 'Not Selected'"></code>
 
 
