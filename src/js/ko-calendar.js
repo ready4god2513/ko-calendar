@@ -206,7 +206,7 @@
 					self.selected(new Date(self.opts.min));
 				}
 				else {
-					self.selected(data);
+					self.selected(new Date(data));
 				}
 			},
 			selectToday: function(data, e) {
