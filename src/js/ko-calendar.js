@@ -16,7 +16,10 @@
 
 			showTime: true,
 			showNow: true,
-			militaryTime: false
+			militaryTime: false,
+
+			min: null,
+			max: null
 		};
 
 		ko.utils.extend(self.opts, params);
@@ -47,7 +50,7 @@
 				 */
 				normalize: function(d) {
 					var normalized = new Date(d.getTime());
-					normalized.setUTCHours(0, 0, 0);
+					normalized.setHours(0, 0, 0, 0);
 					return normalized;
 				},
 
@@ -60,9 +63,9 @@
 				isSame: function(d1, d2) {
 					if(!d1 || !d2) { return false; }
 					return (
-						(d1.getUTCMonth() == d2.getUTCMonth()) &&
-						(d1.getUTCDate() == d2.getUTCDate()) &&
-						(d1.getUTCFullYear() == d2.getUTCFullYear())
+						(d1.getMonth() == d2.getMonth()) &&
+						(d1.getDate() == d2.getDate()) &&
+						(d1.getFullYear() == d2.getFullYear())
 					);
 				},
 
@@ -74,7 +77,7 @@
 				 */
 				isSameMonth: function(d1, d2) {
 					if(!d1 || !d2) { return false; }
-					return d1.getUTCMonth() == d2.getUTCMonth();
+					return d1.getMonth() == d2.getMonth();
 				},
 
 				/**
@@ -84,7 +87,66 @@
 				 */
 				isWeekend: function(d) {
 					if(!d) { return false; }
-					return d.getUTCDay() === 0 || (d.getUTCDay() == self.constants.daysInWeek - 1);
+					return d.getDay() === 0 || (d.getDay() == self.constants.daysInWeek - 1);
+				},
+
+				/**
+				 * Check if the given date falls within the date range
+				 * @param {Date} d The date to check
+				 * @return {Boolean} Whether or not the date falls within the range
+				 */
+				isWithinMinMaxDateRange: function(d) {
+					if(!d) { return false; }
+					if(!self.opts.min && !self.opts.max) { return true; }
+
+					if(self.opts.min && self.utils.date.normalize(self.opts.min) > d) {
+						return false;
+					}
+					if(self.opts.max && self.utils.date.normalize(self.opts.max) < d) {
+						return false;
+					}
+
+					return true;
+				}
+			},
+			time: {
+				handleSuffixCheck: function(date) {
+					var hours = date.getHours();
+					if(hours >= 12) {
+						hours -= 12;
+					}
+					else if(hours < 12) {
+						hours += 12;
+					}
+					return date.setHours(hours);
+				},
+				checkMinTimeRange: function(data) {
+					if(!data || !self.selected() || (!self.opts.min && !self.opts.max)) { return false; }
+
+					var d = new Date(self.selected());
+
+					if(data.type === "hours") { d.setHours(d.getHours() - 1); }
+					else if(data.type === "minutes") { d.setMinutes(d.getMinutes() - 1); }
+					else if(data.type === "suffix") { d = self.utils.time.handleSuffixCheck(d); }
+
+					if(self.opts.max && self.opts.max < d) { return true; }
+					if(self.opts.min && self.opts.min > d) { return true; }
+
+					return false;
+				},
+				checkMaxTimeRange: function(data) {
+					if(!data || !self.selected() || (!self.opts.min && !self.opts.max)) { return false; }
+
+					var d = new Date(self.selected());
+
+					if(data.type === "hours") { d.setHours(d.getHours() + 1); }
+					else if(data.type === "minutes") { d.setMinutes(d.getMinutes() + 1); }
+					else if(data.type === "suffix") { d = new Date(self.utils.time.handleSuffixCheck(d)); }
+
+					if(self.opts.min && self.opts.min > d) { return true; }
+					if(self.opts.max && self.opts.max < d) { return true; }
+
+					return false;
 				}
 			},
 			strings: {
@@ -124,6 +186,15 @@
 		self.selected.subscribe(self.opts.value);
 		self.opts.value(self.opts.selected);
 
+		// Hide today button if the min is greater than today or max is less than today
+		if(self.opts.showToday && !self.utils.date.isWithinMinMaxDateRange(self.utils.date.normalize(new Date()))) {
+			self.opts.showToday = false;
+		}
+		// Hide now button if the current time is out of the min-max time range
+		if(self.opts.showNow && ((self.opts.min && self.opts.min >= new Date()) || (self.opts.max && self.opts.max <= new Date()))) {
+			self.opts.showNow = false;
+		}
+
 		self.calendar = {
 
 			// Selects a date
@@ -131,29 +202,34 @@
 				if( self.opts.deselectable && self.utils.date.isSame(self.selected(), data) ) {
 					return self.selected(null);
 				}
-				self.selected(data);
+				if(self.opts.min && self.utils.date.isSame(data, self.opts.min)) {
+					self.selected(new Date(self.opts.min));
+				}
+				else {
+					self.selected(new Date(data));
+				}
 			},
 			selectToday: function(data, e) {
 				var d = self.utils.date.normalize(new Date());
-				self.selected(d);
+				self.calendar.select(d);
 				self.current(d);
 			},
 			next: function() {
 				self.current(
-					new Date( self.current().setUTCMonth(self.current().getUTCMonth()+1) )
+					new Date( self.current().setMonth(self.current().getMonth()+1) )
 				);
 			},
 			prev: function() {
 				self.current(
-					new Date( self.current().setUTCMonth(self.current().getUTCMonth()-1) )
+					new Date( self.current().setMonth(self.current().getMonth()-1) )
 				);
 			},
 			sheet: ko.computed(function() {
 
 				// Current month set to the first day
 				var normalized = self.utils.date.normalize(self.current());
-				normalized.setUTCDate(1);
-				normalized.setUTCDate(normalized.getUTCDate() - normalized.getUTCDay()); // Set our date to the first day of the week from the normalized month
+				normalized.setDate(1);
+				normalized.setDate(normalized.getDate() - normalized.getDay()); // Set our date to the first day of the week from the normalized month
 
 				var weeks = [];
 				var week = 0;
@@ -171,14 +247,14 @@
 						weeks[week].push(new Date(normalized.getTime()));
 
 						// And increment the date
-						normalized.setUTCDate( normalized.getUTCDate() + 1 );
+						normalized.setDate( normalized.getDate() + 1 );
 					}
 
 					// If we've began working within the current month
-					if( normalized.getUTCMonth() == self.current().getUTCMonth() ) { startedMonth = true; }
+					if( normalized.getMonth() == self.current().getMonth() ) { startedMonth = true; }
 
 					// If we've started our current month and we've changed months (and thus completed it)
-					if( startedMonth && (normalized.getUTCMonth() !== self.current().getUTCMonth()) ) { completedMonth = true; }
+					if( startedMonth && (normalized.getMonth() !== self.current().getMonth()) ) { completedMonth = true; }
 
 					// If we've completed our month and we are at the end of the week
 					if(completedMonth && weeks[week].length == self.constants.daysInWeek) { completedWeek = true; }
@@ -197,44 +273,30 @@
 		self.time = {
 			next: function(data, e) {
 				if(!self.selected()) { return self.time.selectNow(); }
-				self.selected(
-					new Date( data.set( data.get()+1 ) )
-				);
+
+				self.selected( new Date( data.set( data.get()+1 ) ) );
 			},
 			prev: function(data, e) {
 				if(!self.selected()) { return self.time.selectNow(); }
-				self.selected(
-					new Date( data.set( data.get()-1 ) )
-				);
+
+				self.selected( new Date( data.set( data.get()-1 ) ) );
 			},
 			selectNow: function() {
 				var now = new Date();
 
-				now.setTime(
-					Date.UTC(
-						now.getFullYear(),
-						now.getMonth(),
-						now.getDate(),
-						now.getHours(),
-						now.getMinutes(),
-						now.getSeconds()
-					)
-				);
 				self.selected(now);
 				self.current(now);
 			},
 			sheet: ko.observableArray([
 				{
 					type: 'hours',
-					get: function(log) {
-						return self.selected().getUTCHours();
-					},
-					set: function(to) { return self.selected().setUTCHours(to); }
+					get: function() { return self.selected().getHours(); },
+					set: function(to) { return self.selected().setHours(to); }
 				},
 				{
-					type: 'seconds',
-					get: function() { return self.selected().getUTCMinutes(); },
-					set: function(to) { return self.selected().setUTCMinutes(to); }
+					type: 'minutes',
+					get: function() { return self.selected().getMinutes(); },
+					set: function(to) { return self.selected().setMinutes(to); }
 				}
 			]),
 			text: function(data) {
@@ -255,13 +317,14 @@
 						return self.utils.strings.pad(data.get());
 				}
 			}
+
 		};
 
 		if(!self.opts.militaryTime) {
 			self.time.sheet.push({
 				type: 'suffix',
 				get: function() {
-					if(self.selected() && self.selected().getUTCHours() < 12 ) {
+					if(self.selected() && self.selected().getHours() < 12 ) {
 						return 0;
 					}
 					return 1;
@@ -269,14 +332,14 @@
 
 				// This set function is special because we don't care about the `to` parameter
 				set: function(to) {
-					var hours = self.selected().getUTCHours();
+					var hours = self.selected().getHours();
 					if(hours >= 12) {
 						hours -= 12;
 					}
 					else if(hours < 12) {
 						hours += 12;
 					}
-					return self.selected().setUTCHours( hours );
+					return self.selected().setHours( hours );
 				}
 			});
 		}
@@ -294,7 +357,7 @@
 							<a href="#" data-bind="click: calendar.prev" class="prev">&laquo;</a>\
 						</th>\
 						<th data-bind="attr: { colspan: constants.daysInWeek - 2 } ">\
-							<b data-bind="text: strings.months[current().getUTCMonth()] + \' \' + current().getFullYear()"></b>\
+							<b data-bind="text: strings.months[current().getMonth()] + \' \' + current().getFullYear()"></b>\
 						</th>\
 						<th>\
 							<a href="#" data-bind="click: calendar.next" class="next">&raquo;</a>\
@@ -306,8 +369,8 @@
 				</thead>\
 				<tbody data-bind="foreach: calendar.sheet">\
 					<tr class="week" data-bind="foreach: $data">\
-						<td class="day" data-bind="css: { weekend: $parents[1].utils.date.isWeekend($data), today: $parents[1].utils.date.isSame(new Date(), $data), inactive: !($parents[1].utils.date.isSameMonth($parents[1].current(), $data)) } ">\
-							<a href="javascript:;" data-bind="text: $data.getUTCDate(), attr: { title: $data }, click: $parents[1].calendar.select, css: { active: $parents[1].utils.date.isSame($parents[1].selected(), $data) } "></a>\
+						<td class="day" data-bind="css: { weekend: $parents[1].utils.date.isWeekend($data), today: $parents[1].utils.date.isSame(new Date(), $data), inactive: !($parents[1].utils.date.isSameMonth($parents[1].current(), $data)), outofrange: !($parents[1].utils.date.isWithinMinMaxDateRange($data)) } ">\
+							<a href="javascript:;" data-bind="text: $data.getDate(), attr: { title: $data }, click: $parents[1].calendar.select, css: { active: $parents[1].utils.date.isSame($parents[1].selected(), $data) } "></a>\
 						</td>\
 					</tr>\
 				</tbody>\
@@ -326,7 +389,7 @@
 			<table class="time-sheet">\
 				<tbody>\
 					<tr data-bind="foreach: time.sheet">\
-						<td>\
+						<td data-bind="css: { outofrange: $parent.utils.time.checkMaxTimeRange($data) }">\
 							<a href="#" class="up" data-bind="click: $parent.time.next"></a>\
 						</td>\
 					</tr>\
@@ -334,7 +397,7 @@
 						<td data-bind="css: { colon: $index() === 0, inactive: !$parent.selected() }, text: $parent.time.text($data)"></td>\
 					</tr>\
 					<tr data-bind="foreach: time.sheet">\
-						<td>\
+						<td data-bind="css: { outofrange: $parent.utils.time.checkMinTimeRange($data) }">\
 							<a href="#" class="down" data-bind="click: $parent.time.prev"></a>\
 						</td>\
 					</tr>\
