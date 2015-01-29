@@ -32,17 +32,17 @@ ko-calender depends on Knockout.js 3.2.0+
 # API
 ko-calendar supports Components and bindings.
 
-## Component
+### Component
 ```html
 <div data-bind="component: { name: 'calendar', params: opts }"></div>
 ```
 
-## Inline Binding
+### Inline Binding
 ```html
 <div data-bind="calendar: opts"></div>
 ```
 
-## Input Binding
+### Input Binding
 ```html
 <input type="text" data-bind="calendar: opts">
 ```
