@@ -4,12 +4,13 @@
 		<meta charset="utf-8">
 		<title>KO Calendar</title>
 
-		<link rel="stylesheet" type="text/css" href="../dist/ko-calendar.css">
+		<link rel="stylesheet" type="text/css" href="../dist/ko-calendar.min.css">
 	</head>
 	<body>
 
-		<div data-bind="component: { name: 'calendar', params: opts }"></div>
-		<!-- <input type="text" data-bind="calendar: opts, value: date" /> -->
+		<!--<div data-bind="component: { name: 'calendar', params: opts }"></div> -->
+		<input type="text" data-bind="calendar: opts, value: date" tabindex="1" />
+		<input type="text" data-bind="calendar: opts2, value: date2" tabindex="2" />
 
 
 		<code data-bind="text: date() || 'Not Selected'"></code>
@@ -22,9 +23,17 @@
 
 				var Demo = function() {
 					var self = this;
+
 					self.date = ko.observable();
+					self.date2 = ko.observable();
+
 					self.opts = {
 						value: self.date,
+						min: new Date(2015, 0, 5)
+					};
+
+					self.opts2 = {
+						value: self.date2,
 						min: new Date(2015, 0, 5)
 					};
 				};

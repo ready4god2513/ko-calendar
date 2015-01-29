@@ -428,43 +428,49 @@
 
 			var params = ko.unwrap(opts());
 			var instance = new Model(params);
+			var cal;
 
 			if( el.tagName == "INPUT" ) {
 
 				// Create our template
 				var temp = document.createElement('div');
 				temp.innerHTML = Template;
-				target = temp.children[0];
-				el.parentNode.insertBefore(target, el.nextSibling);
+				cal = temp.children[0];
+				el.parentNode.insertBefore(cal, el.nextSibling);
 
 				instance.visible(false);
-				el.addEventListener('focus', function() {
+
+
+				ko.utils.registerEventHandler(el, 'focus', function() {
 
 					var offset = instance.utils.element.offset(el);
 					var height = instance.utils.element.height(el);
-					target.style.position = "absolute";
-					target.style.top = (offset.top + height + 5) + 'px';
-					target.style.left = (offset.left) + 'px';
+					cal.style.position = "absolute";
+					cal.style.top = (offset.top + height + 5) + 'px';
+					cal.style.left = (offset.left) + 'px';
 
 					instance.visible(true);
 				});
 
-				document.addEventListener('mousedown', function(e) {
+
+				ko.utils.registerEventHandler(document, 'mousedown', function(e) {
 					if(!(
 						e.target == el ||
-						e.target == target ||
-						instance.utils.element.isDescendant(target, e.target)
+						e.target == cal ||
+						instance.utils.element.isDescendant(cal, e.target)
 					)) {
 						instance.visible(false);
+					} else {
+						el.focus();
 					}
 				});
 
 			} else {
-				target = el.children[0]; // The first node in our Template
+				cal = el.children[0]; // The first node in our Template
 			}
 
 			el.innerHTML = Template;
-			ko.applyBindings(instance, target);
+			ko.applyBindings(instance, cal);
 
 			return {
 				controlsDescendantBindings: true

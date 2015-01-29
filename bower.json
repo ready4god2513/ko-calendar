@@ -12,8 +12,8 @@
 		"bower_components"
 	],
 	"main": [
-		"dist/ripple.js",
-		"dist/ripple.css"
+		"dist/ko-calendar.min.js",
+		"dist/ko-calendar.min.css"
 	],
 	"dependencies": {
 		"knockout": "http://cdnjs.cloudflare.com/ajax/libs/knockout/3.2.0/knockout-min.js"

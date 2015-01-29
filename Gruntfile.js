@@ -16,14 +16,15 @@ module.exports = function (grunt) {
 		},
 
 		less: {
-			dev: {
+			prod: {
 				options: {
+					compress: true,
 					sourcemap: 'none'
 				},
 				files: {
-					'dist/ko-calendar.css': ['src/less/ko-calendar.less']
+					'dist/ko-calendar.min.css': ['src/less/ko-calendar.less']
 				}
-			},
+			}
 		},
 
 		uglify: {

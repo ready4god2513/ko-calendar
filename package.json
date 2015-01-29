@@ -3,7 +3,8 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-
+		"build": "node ./node_modules/grunt-cli/bin/grunt",
+    	"build-watch": "node ./node_modules/grunt-cli/bin/grunt develop"
 	},
 	"repository": "git@github.com:jakiestfu/ko-calendar.git",
 	"dependencies": {
