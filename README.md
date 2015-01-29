@@ -1,16 +1,16 @@
-ko-calendar
-==============
+<img align="right" src="http://i.imgur.com/at52A0H.png" width="235">
+
+## ko-calendar
 
 A simple datetime picker built with knockout
 
-# Features
+## Features
 * Only dependency is Knockout.js
 * Lightweight, ~8kb JS, ~4kb CSS
 * Simple, Terse, Legible (looking at any other datepicker)
 * Supports Components and Bindings
 * Cross browser compatible (Thanks, KO)
 
-<img align="right" src="http://i.imgur.com/at52A0H.png" width="235">
 
 # Installing & Building
 ```sh
