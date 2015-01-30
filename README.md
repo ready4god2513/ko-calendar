@@ -150,6 +150,7 @@ var opts = {
 * Event system
 * JS API
 * Unit testing
+* Localization API
 
 # Screenshot
 <img src="http://i.imgur.com/at52A0H.png" width="235">

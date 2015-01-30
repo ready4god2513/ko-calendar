@@ -2,6 +2,7 @@
 
 	var binding = 'calendar';
 
+
 	var Model = function(params) {
 		var self = this;
 
@@ -24,8 +25,8 @@
 
 		ko.utils.extend(self.opts, params);
 
-		if(!self.opts.calendar && !self.opts.showTime) {
-			console.error('Silly goose, what are you using ko-calendar for?');
+		if(!self.opts.showCalendar && !self.opts.showTime) {
+			console.error('Silly goose, what are you using ko-%s for?', binding);
 			return;
 		}
 
@@ -348,7 +349,7 @@
 	};
 
 	var Template =
-		'<div class="ko-calendar" data-bind="with: $data, visible: (opts.showCalendar || opts.showTime) && visible()">\
+		'<div class="ko-calendar" data-bind="with: $data, visible: (opts.showCalendar || opts.showTime && visible(), attr: { \'data-opts\': JSON.stringify(opts) } ">\
 			<!-- ko if: opts.showCalendar -->\
 			<table data-bind="css: { selected: selected } " class="calendar-sheet">\
 				<thead>\
@@ -424,7 +425,7 @@
 
 	// Binding
 	ko.bindingHandlers[binding] = {
-		init: function(el, opts, allBindings, viewModel, bindingContext) {
+		init: function(el, opts) {
 
 			var params = ko.unwrap(opts());
 			var instance = new Model(params);
@@ -439,7 +440,6 @@
 				el.parentNode.insertBefore(cal, el.nextSibling);
 
 				instance.visible(false);
-
 
 				ko.utils.registerEventHandler(el, 'focus', function() {
 
@@ -466,10 +466,11 @@
 				});
 
 			} else {
+				el.innerHTML = Template;
 				cal = el.children[0]; // The first node in our Template
 			}
 
-			el.innerHTML = Template;
+			console.log('w');
 			ko.applyBindings(instance, cal);
 
 			return {
@@ -477,5 +478,5 @@
 			};
 		}
 	};
-
+	console.log('2');
 }).call(this);
