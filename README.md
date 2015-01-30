@@ -20,7 +20,7 @@ $ npm run-script build-watch # Compiles and watches source for changes
 ```
 
 # Usage
-ko-calender depends on Knockout.js 3.2.0+
+ko-calendar depends on Knockout.js 3.2.0+
 ```html
 <head>
 	<link href="ko-calendar.min.css" rel="stylesheet" type="text/css">
@@ -117,7 +117,7 @@ All options are deeply extended, allowing you to only specify the options you wi
 			<td>showToday</td>
 			<td>Boolean</td>
 			<td>true</td>
-			<td>If showCalender is true, shows a button below the calender that allows the user to quickly select the current day</td>
+			<td>If showCalender is true, shows a button below the calendar that allows the user to quickly select the current day</td>
 		</tr>
 		<tr>
 			<td>showTime</td>
