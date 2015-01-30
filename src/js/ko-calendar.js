@@ -2,6 +2,21 @@
 
 	var binding = 'calendar';
 
+	// Core utils
+	var utils = {
+		deepExtend: function(destination, source) {
+	        var property;
+	        for (property in source) {
+	            if (source[property] && source[property].constructor && source[property].constructor === Object) {
+	                destination[property] = destination[property] || {};
+	                utils.deepExtend(destination[property], source[property]);
+	            } else {
+	                destination[property] = source[property];
+	            }
+	        }
+	        return destination;
+	    }
+	};
 
 	var Model = function(params) {
 		var self = this;
@@ -20,28 +35,30 @@
 			militaryTime: false,
 
 			min: null,
-			max: null
+			max: null,
+
+			strings: {
+				months: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ],
+				days: [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ],
+				time: ["AM", "PM"]
+			}
 		};
 
-		ko.utils.extend(self.opts, params);
+		utils.deepExtend(self.opts, params);
 
 		if(!self.opts.showCalendar && !self.opts.showTime) {
 			console.error('Silly goose, what are you using ko-%s for?', binding);
 			return;
 		}
 
-		self.strings = {
-			months: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ],
-			days: [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ],
-			time: ["AM", "PM"]
-		};
-
 		self.constants = {
 			daysInWeek: 7,
 			dayStringLength: 2
 		};
 
+		// Model utils
 		self.utils = {
+
 			date: {
 
 				/**
@@ -307,7 +324,7 @@
 
 				switch(data.type) {
 					case 'suffix':
-						return data.get() ? self.strings.time[1] : self.strings.time[0];
+						return data.get() ? self.opts.strings.time[1] : self.opts.strings.time[0];
 					case 'hours':
 						var hours = data.get();
 						if(!self.opts.militaryTime && (hours > 12 || hours === 0) ) {
@@ -358,13 +375,13 @@
 							<a href="#" data-bind="click: calendar.prev" class="prev">&laquo;</a>\
 						</th>\
 						<th data-bind="attr: { colspan: constants.daysInWeek - 2 } ">\
-							<b data-bind="text: strings.months[current().getMonth()] + \' \' + current().getFullYear()"></b>\
+							<b data-bind="text: opts.strings.months[current().getMonth()] + \' \' + current().getFullYear()"></b>\
 						</th>\
 						<th>\
 							<a href="#" data-bind="click: calendar.next" class="next">&raquo;</a>\
 						</th>\
 					</tr>\
-					<tr data-bind="foreach: strings.days">\
+					<tr data-bind="foreach: opts.strings.days">\
 						<th data-bind="text: $data.substring(0, $parents[1].constants.dayStringLength)"></th>\
 					</tr>\
 				</thead>\
@@ -470,7 +487,6 @@
 				cal = el.children[0]; // The first node in our Template
 			}
 
-			console.log('w');
 			ko.applyBindings(instance, cal);
 
 			return {
@@ -478,5 +494,5 @@
 			};
 		}
 	};
-	console.log('2');
+
 }).call(this);

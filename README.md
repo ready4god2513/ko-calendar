@@ -63,10 +63,16 @@ var opts = {
 	militaryTime: false,
 
 	min: null,
-	max: null
+	max: null,
+
+	strings: {
+		months: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ],
+		days: [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ],
+		time: ["AM", "PM"]
+	}
 };
 ```
-
+All options are deeply extended, allowing you to only specify the options you wish to override.
 <table>
 	<thead>
 		<tr>
@@ -142,6 +148,12 @@ var opts = {
 			<td>Date</td>
 			<td>null</td>
 			<td>A Date object that enforces the calendar &apm; time cannot be set after this date</td>
+		</tr>
+		<tr>
+			<td>strings</td>
+			<td>Object</td>
+			<td>...</td>
+			<td>An object that specifies all strings used for the calendar, useful for localization. Any of the keys within this object may be included.</td>
 		</tr>
 	</tbody>
 </table>
