@@ -68,12 +68,6 @@
 
 			<div data-bind="calendar: opts"></div>
 
-
-			<!--<div data-bind="component: { name: 'calendar', params: opts }"></div>
-			<input type="text" data-bind="calendar: opts, value: date" tabindex="1" />
-			<input type="text" data-bind="calendar: opts2, value: date2" tabindex="2" /> -->
-
-
 			<code data-bind="text: opts.value() || 'Not Selected'"></code>
 
 		</div>
@@ -85,6 +79,7 @@
 		<script type="text/javascript">
 
 			(function() {
+
 				var Demo = function() {
 					var self = this;
 
@@ -100,6 +95,7 @@
 
 				var instance = window.instance = new Demo();
 				ko.applyBindings(instance);
+
 			})();
 
 		</script>

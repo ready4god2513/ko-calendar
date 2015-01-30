@@ -47,6 +47,11 @@ ko-calendar supports Components and bindings.
 <input type="text" data-bind="calendar: opts">
 ```
 
+### JS API
+```javascript
+ko.calendar(document.getElementById('calendar'), opts);
+```
+
 # Default Options
 ```javascript
 var opts = {
@@ -168,7 +173,6 @@ All options are deeply extended, allowing you to only specify the options you wi
 
 # Roadmap
 * Event system
-* JS API
 * Unit testing
 
 # Screenshot

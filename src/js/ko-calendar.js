@@ -444,6 +444,61 @@
 			<!-- /ko -->\
 		</div>';
 
+	var applyCalendar = function(el, opts) {
+
+		var instance = new Model(opts);
+		var cal;
+
+		if( el.tagName == "INPUT" ) {
+
+			// Create our template
+			var temp = document.createElement('div');
+			temp.innerHTML = Template;
+			cal = temp.children[0];
+			el.parentNode.insertBefore(cal, el.nextSibling);
+
+			instance.input(true);
+			instance.visible(false);
+
+			// Focusing on an input
+			ko.utils.registerEventHandler(el, 'focus', function(e) {
+
+				var offset = instance.utils.element.offset(el);
+				var height = instance.utils.element.height(el);
+				cal.style.position = "absolute";
+				cal.style.top = (offset.top + height + 5) + 'px';
+				cal.style.left = (offset.left) + 'px';
+
+				instance.visible(true);
+			});
+
+			ko.utils.registerEventHandler(el, 'keydown', function(e) {
+				// User has pressed tab
+				if(e.which == 9 ) {
+					instance.visible(false);
+				}
+			});
+
+			// Clicking outside of an input
+			ko.utils.registerEventHandler(document, 'mousedown', function(e) {
+				if(!(
+					e.target == el ||
+					e.target == cal ||
+					instance.utils.element.isDescendant(cal, e.target)
+				)) {
+					instance.visible(false);
+				} else {
+					el.focus();
+				}
+			});
+
+		} else {
+			el.innerHTML = Template;
+			cal = el.children[0]; // The first node in our Template
+		}
+
+		ko.applyBindings(instance, cal);
+	};
 
 	// Component
 	ko.components.register(binding, {
@@ -455,64 +510,15 @@
 	ko.bindingHandlers[binding] = {
 		init: function(el, opts) {
 
-			var params = ko.unwrap(opts());
-			var instance = new Model(params);
-			var cal;
-
-			if( el.tagName == "INPUT" ) {
-
-				// Create our template
-				var temp = document.createElement('div');
-				temp.innerHTML = Template;
-				cal = temp.children[0];
-				el.parentNode.insertBefore(cal, el.nextSibling);
-
-				instance.input(true);
-				instance.visible(false);
-
-				// Focusing on an input
-				ko.utils.registerEventHandler(el, 'focus', function(e) {
-
-					var offset = instance.utils.element.offset(el);
-					var height = instance.utils.element.height(el);
-					cal.style.position = "absolute";
-					cal.style.top = (offset.top + height + 5) + 'px';
-					cal.style.left = (offset.left) + 'px';
-
-					instance.visible(true);
-				});
-
-				ko.utils.registerEventHandler(el, 'keydown', function(e) {
-					// User has pressed tab
-					if(e.which == 9 ) {
-						instance.visible(false);
-					}
-				});
-
-				// Clicking outside of an input
-				ko.utils.registerEventHandler(document, 'mousedown', function(e) {
-					if(!(
-						e.target == el ||
-						e.target == cal ||
-						instance.utils.element.isDescendant(cal, e.target)
-					)) {
-						instance.visible(false);
-					} else {
-						el.focus();
-					}
-				});
-
-			} else {
-				el.innerHTML = Template;
-				cal = el.children[0]; // The first node in our Template
-			}
-
-			ko.applyBindings(instance, cal);
+			applyCalendar(el, ko.unwrap(opts()));
 
 			return {
 				controlsDescendantBindings: true
 			};
 		}
 	};
+
+	// JS API
+	ko[binding] = applyCalendar;
 
 }).call(this);
