@@ -7,9 +7,15 @@
 
 	background: @background;
 
+	z-index: 99999;
+
 	* {
 		text-rendering: optimizeLegibility;
 		-webkit-font-smoothing: antialiased;
+
+		-webkit-box-sizing: content-box;
+		-moz-box-sizing: content-box;
+		box-sizing: content-box;
 	}
 
 	padding: 4px;
@@ -20,9 +26,7 @@
 
 	font-family: sans-serif;
 	font-size: @base-font-size;
-
 	text-align: center;
-
 	color: @color;
 
 	.calendar-sheet,
@@ -83,6 +87,14 @@
 				}
 				&:after {
 					border-bottom-color: @active-color;
+				}
+			}
+		}
+
+		thead {
+			tr.month-header {
+				th {
+					height: 30px;
 				}
 			}
 		}

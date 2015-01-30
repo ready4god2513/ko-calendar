@@ -65,6 +65,8 @@ var opts = {
 	min: null,
 	max: null,
 
+	autoclose: true,
+
 	strings: {
 		months: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ],
 		days: [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ],
@@ -148,6 +150,12 @@ All options are deeply extended, allowing you to only specify the options you wi
 			<td>Date</td>
 			<td>null</td>
 			<td>A Date object that enforces the calendar &apm; time cannot be set after this date</td>
+		</tr>
+		<tr>
+			<td>autoclose</td>
+			<td>Boolean</td>
+			<td>true</td>
+			<td>If true, the calendar will close when bound to an input the user selects a date</td>
 		</tr>
 		<tr>
 			<td>strings</td>

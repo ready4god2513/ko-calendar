@@ -37,6 +37,8 @@
 			min: null,
 			max: null,
 
+			autoclose: true,
+
 			strings: {
 				months: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ],
 				days: [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ],
@@ -226,6 +228,10 @@
 				else {
 					self.selected(new Date(data));
 				}
+
+				if( self.input() && self.opts.autoclose ) {
+					self.visible(false);
+				}
 			},
 			selectToday: function(data, e) {
 				var d = self.utils.date.normalize(new Date());
@@ -304,6 +310,10 @@
 
 				self.selected(now);
 				self.current(now);
+
+				if( self.input() && self.opts.autoclose ) {
+					self.visible(false);
+				}
 			},
 			sheet: ko.observableArray([
 				{
@@ -362,15 +372,16 @@
 			});
 		}
 
+		self.input = ko.observable(false); // Is binding attached to an imput?
 		self.visible = ko.observable(true);
 	};
 
 	var Template =
-		'<div class="ko-calendar" data-bind="with: $data, visible: (opts.showCalendar || opts.showTime && visible(), attr: { \'data-opts\': JSON.stringify(opts) } ">\
+		'<div class="ko-calendar" data-bind="with: $data, visible: (opts.showCalendar || opts.showTime) && visible(), attr: { \'data-opts\': JSON.stringify(opts) } ">\
 			<!-- ko if: opts.showCalendar -->\
 			<table data-bind="css: { selected: selected } " class="calendar-sheet">\
 				<thead>\
-					<tr>\
+					<tr class="month-header">\
 						<th>\
 							<a href="#" data-bind="click: calendar.prev" class="prev">&laquo;</a>\
 						</th>\
@@ -456,9 +467,11 @@
 				cal = temp.children[0];
 				el.parentNode.insertBefore(cal, el.nextSibling);
 
+				instance.input(true);
 				instance.visible(false);
 
-				ko.utils.registerEventHandler(el, 'focus', function() {
+				// Focusing on an input
+				ko.utils.registerEventHandler(el, 'focus', function(e) {
 
 					var offset = instance.utils.element.offset(el);
 					var height = instance.utils.element.height(el);
@@ -469,7 +482,14 @@
 					instance.visible(true);
 				});
 
+				ko.utils.registerEventHandler(el, 'keydown', function(e) {
+					// User has pressed tab
+					if(e.which == 9 ) {
+						instance.visible(false);
+					}
+				});
 
+				// Clicking outside of an input
 				ko.utils.registerEventHandler(document, 'mousedown', function(e) {
 					if(!(
 						e.target == el ||
