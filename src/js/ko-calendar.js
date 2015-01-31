@@ -239,14 +239,16 @@
 				self.current(d);
 			},
 			next: function() {
-				self.current(
-					new Date( self.current().setMonth(self.current().getMonth()+1) )
-				);
+				var cur = self.current();
+				cur.setDate(1);
+				cur.setMonth(cur.getMonth()+1);
+				self.current(new Date(cur));
 			},
 			prev: function() {
-				self.current(
-					new Date( self.current().setMonth(self.current().getMonth()-1) )
-				);
+				var cur = self.current();
+				cur.setDate(1);
+				cur.setMonth(cur.getMonth()-1);
+				self.current(new Date(cur));
 			},
 			sheet: ko.computed(function() {
 
