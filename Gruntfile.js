@@ -18,6 +18,7 @@ module.exports = function (grunt) {
 		less: {
 			prod: {
 				options: {
+					banner: "/*! ko-calendar.css v" + pkg.version + " */ ",
 					compress: true,
 					sourcemap: 'none'
 				},
@@ -30,7 +31,7 @@ module.exports = function (grunt) {
 		uglify: {
 			prod: {
 				options: {
-					banner: "/*! ko-calendar */" + "\n",
+					banner: "/*! ko-calendar.js v" + pkg.version + " */" + "\n",
 					preserveComments: 'none'
 				},
 				files: {
