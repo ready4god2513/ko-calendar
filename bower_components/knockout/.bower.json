@@ -1,0 +1,11 @@
+{
+  "name": "knockout",
+  "_cacheHeaders": {
+    "Last-Modified": "Sat, 23 Aug 2014 17:45:18 GMT",
+    "Content-Type": "application/javascript"
+  },
+  "main": "index.js",
+  "_source": "http://cdnjs.cloudflare.com/ajax/libs/knockout/3.2.0/knockout-min.js",
+  "_target": "*",
+  "_originalSource": "http://cdnjs.cloudflare.com/ajax/libs/knockout/3.2.0/knockout-min.js"
+}
