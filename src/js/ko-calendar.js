@@ -24,7 +24,7 @@
 		self.opts = {
 			value: ko.observable(),
 			current: new Date(),
-			selected: null,
+
 			deselectable: true,
 
 			showCalendar: true,
@@ -201,10 +201,9 @@
 		};
 
 		// Date Alias Helpers
-		self.current = ko.observable(self.opts.current || new Date()); // The current Date
-		self.selected = ko.observable(self.opts.selected); // The selected Date
-		self.selected.subscribe(self.opts.value);
-		self.opts.value(self.opts.selected);
+		self.current = ko.observable(self.opts.current || new Date()); // The current sheet Date
+		self.selected = ko.observable(self.opts.value()); // The selected Date
+		self.selected.subscribe(self.opts.value); // Everytime our selected observable changes, update value observable
 
 		// Hide today button if the min is greater than today or max is less than today
 		if(self.opts.showToday && !self.utils.date.isWithinMinMaxDateRange(self.utils.date.normalize(new Date()))) {
