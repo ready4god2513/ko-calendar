@@ -57,7 +57,6 @@ ko.calendar(document.getElementById('calendar'), opts);
 var opts = {
 	value: ko.observable(),
 	current: new Date(),
-	selected: null,
 	deselectable: true,
 
 	showCalendar: true,
@@ -93,20 +92,14 @@ All options are deeply extended, allowing you to only specify the options you wi
 		<tr>
 			<td>value</td>
 			<td>Observable</td>
-			<td>ko.observable()</td>
-			<td>The value of the selected date</td>
+			<td>ko.observable([Date Object])</td>
+			<td>An observable of the selected date</td>
 		</tr>
 		<tr>
 			<td>current</td>
 			<td>Date</td>
 			<td>new Date()</td>
-			<td>A Date object that will be used to set as the current month/year on the calendar</td>
-		</tr>
-		<tr>
-			<td>selected</td>
-			<td>Observable</td>
-			<td>null</td>
-			<td>Not to be confused with value, used to internally mark what the selected date is. Consider deprecating from the options list</td>
+			<td>The date of the sheet being currently viewed</td>
 		</tr>
 		<tr>
 			<td>deselectable</td>
