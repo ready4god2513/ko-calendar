@@ -35,32 +35,27 @@
 		width: 100%;
 		border-collapse: collapse;
 
-		.today {
-			a {
-				position: relative;
-				font-weight: bold;
-				&:after {
-					content: '';
-					display: inline-block;
-					border-left: 7px solid transparent;
-					border-bottom: 7px solid @active;
-					border-top-color: transparent;
-					position: absolute;
-					bottom: 4px;
-					right: 4px;
+		th,
+		td {
+			text-align: center;
+			vertical-align: middle;
+		}
+
+		thead {
+			tr {
+				&.month-header {
+					th {
+						height: 30px;
+					}
 				}
 			}
 		}
-		.inactive {
+
+		tfoot {
 			a {
-				color: @inactive-color;
-			}
-		}
-		.outofrange {
-			cursor: not-allowed;
-			a {
-				color: @inactive-color;
-				pointer-events: none;
+				width: auto;
+				display: block;
+				font-weight: bold;
 			}
 		}
 
@@ -91,22 +86,32 @@
 			}
 		}
 
-		thead {
-			tr {
-				th { text-align: center; }
-				&.month-header {
-					th {
-						height: 30px;
-					}
+		.today {
+			a {
+				position: relative;
+				font-weight: bold;
+				&:after {
+					content: '';
+					display: inline-block;
+					border-left: 7px solid transparent;
+					border-bottom: 7px solid @active;
+					border-top-color: transparent;
+					position: absolute;
+					bottom: 4px;
+					right: 4px;
 				}
 			}
 		}
-
-		tfoot {
+		.inactive {
 			a {
-				width: auto;
-				display: block;
-				font-weight: bold;
+				color: @inactive-color;
+			}
+		}
+		.outofrange {
+			cursor: not-allowed;
+			a {
+				color: @inactive-color;
+				pointer-events: none;
 			}
 		}
 
