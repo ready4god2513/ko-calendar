@@ -14,7 +14,6 @@ A simple datetime picker built with knockout.
 - [Roadmap](#roadmap)
 - [Screenshot](#screenshot)
 - [License](LICENSE)
-- [Features](#features)
 
 # Features
 * Only dependency is Knockout.js
