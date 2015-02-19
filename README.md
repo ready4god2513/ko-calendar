@@ -1,13 +1,27 @@
 # ko-calendar
 
-A simple datetime picker built with knockout
+A simple datetime picker built with knockout.
+
+[View a demo here](http://makerstudios.github.io/ko-calendar/demo/)
+
+***
+
+- [Features](#features)
+- [Installing & Building](#installing--building)
+- [Usage](#usage)
+- [API](#api)
+- [Default Options](#default-options)
+- [Roadmap](#roadmap)
+- [Screenshot](#screenshot)
+- [License](LICENSE)
+- [Features](#features)
 
 # Features
 * Only dependency is Knockout.js
 * Lightweight, ~8kb JS, ~4kb CSS
-* Simple, Terse, Legible (looking at any other datepicker)
-* Supports Components and Bindings
-* Cross browser compatible (Thanks, KO)
+* Simple, Terse, [Legible](https://github.com/MakerStudios/ko-calendar/blob/develop/src/js/ko-calendar.js) (looking at any other datepicker)
+* Supports Components, Bindings, and a plain JS API
+* Cross browser compatible. Thanks, [Knockout!](https://github.com/knockout/knockout)
 
 
 # Installing & Building
@@ -57,6 +71,7 @@ ko.calendar(document.getElementById('calendar'), opts);
 var opts = {
 	value: ko.observable(),
 	current: new Date(),
+
 	deselectable: true,
 
 	showCalendar: true,
@@ -163,6 +178,24 @@ All options are deeply extended, allowing you to only specify the options you wi
 		</tr>
 	</tbody>
 </table>
+
+# FAQ
+**How do I set the initial date being viewed on the calendar?**
+- The current "sheet" being viewed at any point reflects the date set in the `opts.current` variable. When a user paginates months/years, this date changed with it.
+
+**How can I set the initial selected date of the calendar?**
+- The current date selected is an observable and can be found in `opts.value`. Normally, you'd provide your own observable in this field so you can capture the value of the calendar within your code.
+
+**I want to use this as an input binding but some of my options aren't being set**
+- ko-calendar is meant to be used in conjunction with other bindings. For example, if you want the value of the input to be the value in the calendar:
+```html
+<input type="text" data-bind="value: myDate, calendar: { value: myDate } ">
+```
+- You must set the `value` binding in conjunction with the `calendar` binding.
+
+**Selecting a date doesn't close the picker, what gives?**
+- Set `opts.autoclose` to `true` to dismiss the calendar _when a date_ has been selected.
+
 
 # Roadmap
 * Event system
