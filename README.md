@@ -11,6 +11,7 @@ A simple datetime picker built with knockout.
 - [Usage](#usage)
 - [API](#api)
 - [Default Options](#default-options)
+- [FAQ](#faq)
 - [Screenshot](#screenshot)
 - [Contributing](#contributing)
 - [License](LICENSE)
