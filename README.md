@@ -11,8 +11,8 @@ A simple datetime picker built with knockout.
 - [Usage](#usage)
 - [API](#api)
 - [Default Options](#default-options)
-- [Roadmap](#roadmap)
 - [Screenshot](#screenshot)
+- [Contributing](#contributing)
 - [License](LICENSE)
 
 # Features
@@ -195,13 +195,11 @@ All options are deeply extended, allowing you to only specify the options you wi
 **Selecting a date doesn't close the picker, what gives?**
 - Set `opts.autoclose` to `true` to dismiss the calendar _when a date_ has been selected.
 
-
-# Roadmap
-* Event system
-* Unit testing
-
 # Screenshot
 <img src="http://i.imgur.com/at52A0H.png" width="235">
 
+# Contributing
+Contributions to the project are most welcome, so feel free to fork and improve. When submitting a pull request, please run `grunt jshint` (or `npm run-script build`) first to ensure common issues have been caught.
+
 # License
-MIT
+The MIT License (MIT) Copyright (c) 2015 Maker Studios
