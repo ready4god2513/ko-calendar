@@ -1,4 +1,12 @@
-(function(win, doc) {
+(function(root, installLibrary) {
+    if (typeof define === 'function' && define.amd) {
+        define(['knockout'], function(ko) {
+            installLibrary.call(root, window, document, ko);
+        });
+    } else {
+        installLibrary.call(root, window, document, ko);
+    }
+})(this, function(win, doc, ko) {
 
     var binding = 'calendar';
 
@@ -526,4 +534,4 @@
     // JS API
     ko[binding] = applyCalendar;
 
-}).call(this, window, document);
+});
