@@ -470,27 +470,39 @@
             var temp = doc.createElement('div');
             temp.innerHTML = Template;
             cal = temp.children[0];
-            //el.parentNode.insertBefore(cal, el.nextSibling);
             doc.body.appendChild(cal);
 
             instance.input(true);
             instance.visible(false);
 
-            // Focusing on an input
+            // Position Calendar
             ko.utils.registerEventHandler(el, 'focus', function(e) {
 
-                var offset = instance.utils.element.offset(el);
-                var height = instance.utils.element.height(el);
-                cal.style.position = "absolute";
-                cal.style.top = (offset.top + height + 5) + 'px';
-                cal.style.left = (offset.left) + 'px';
+                // Push this to the end of the stack so we can get the cal width
+                setTimeout(function() {
+                    var offset = instance.utils.element.offset(el);
+                    var height = instance.utils.element.height(el);
+                    var positions = [window.innerWidth - cal.offsetWidth - 20, offset.left];
 
+                    cal.style.position = "absolute";
+                    cal.style.top = (offset.top + height + 5) + 'px';
+                    cal.style.left = (Math.min.apply(null, positions)) + 'px';
+                });
+
+                // Mark as visible
                 instance.visible(true);
             });
 
+            // Kill input/calendar focus
             ko.utils.registerEventHandler(el, 'keydown', function(e) {
                 // User has pressed tab
-                if(e.which == 9 ) {
+                var cancellers = {
+                    9: true, // tab
+                    27: true, // escape
+                    46: true, // delete
+                    13: true // enter
+                };
+                if( e.which in cancellers ) {
                     instance.visible(false);
                 }
             });
@@ -505,6 +517,13 @@
                     instance.visible(false);
                 } else {
                     el.focus();
+                }
+            });
+
+            // Unset observable upon certain values
+            ko.utils.registerEventHandler(el, 'keyup', function(e) {
+                if(e.target.value === "") {
+                    instance.value(null);
                 }
             });
 
