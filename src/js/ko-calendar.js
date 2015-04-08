@@ -74,6 +74,20 @@
             date: {
 
                 /**
+                 * Takes a string and returns true/false depending on whether
+                 * or not the date is valid
+                 * @param  {String}  dateString The date string to attempt to parse
+                 * @return {Boolean}            True if the date is valid, false otherwise
+                 */
+                isValid: function(dateString) {
+                    var date = new Date(dateString);
+                    if ( Object.prototype.toString.call(date) !== "[object Date]" ) {
+                        return false;
+                    }
+                    return !isNaN(date.getTime());
+                },
+
+                /**
                  * Takes a given date and sets the time to midnight
                  * @param  {Date} d The date object to normalize
                  * @return {Date}   The normalized date
@@ -524,6 +538,9 @@
             ko.utils.registerEventHandler(el, 'keyup', function(e) {
                 if(e.target.value === "") {
                     instance.value(null);
+                }
+                if( instance.utils.date.isValid(e.target.value) ) {
+                    instance.value( new Date(e.target.value) );
                 }
             });
 
