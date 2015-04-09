@@ -534,8 +534,6 @@
                 }
             });
 
-            console.log("WHAT");
-
             // Unset observable upon certain values
             ko.utils.registerEventHandler(el, 'blur', function(e) {
 
@@ -545,8 +543,6 @@
 
                 if( instance.utils.date.isValid(e.target.value) ) {
                     var newDate = new Date(e.target.value);
-
-                    //console.log(instance.value(), instance.value().toString());
 
                     if( instance.value() === null ||
                         (instance.value() && instance.value().getTime() !== newDate.getTime())
