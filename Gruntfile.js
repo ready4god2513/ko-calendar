@@ -33,7 +33,7 @@ module.exports = function (grunt) {
 				options: {
 					banner: "/*! ko-calendar.js v" + pkg.version + " */" + "\n",
 					preserveComments: 'none',
-					footer: "ko.calendar.version = \"" + pkg.version + "\""
+					footer: "ko.calendar.version = \"" + pkg.version + "\";"
 				},
 				files: {
 					'dist/ko-calendar.min.js': ['src/js/ko-calendar.js']
