@@ -1,6 +1,6 @@
 {
 	"name": "ko-calendar",
-	"version": "0.2.8",
+	"version": "0.2.9",
 	"private": true,
 	"scripts": {
 		"build": "node ./node_modules/grunt-cli/bin/grunt",
