@@ -535,12 +535,15 @@
             });
 
             // Unset observable upon certain values
-            ko.utils.registerEventHandler(el, 'keyup', function(e) {
+            ko.utils.registerEventHandler(el, 'blur', function(e) {
                 if(e.target.value === "") {
                     instance.value(null);
                 }
                 if( instance.utils.date.isValid(e.target.value) ) {
-                    instance.value( new Date(e.target.value) );
+                    var newDate = new Date(e.target.value);
+                    if( newDate.getTime() !== instance.value().getTime() ) {
+                        instance.value(newDate);
+                    }
                 }
             });
 
